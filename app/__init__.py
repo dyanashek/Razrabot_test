@@ -1,7 +1,9 @@
 from flask import Flask
-from flask_restful import Api
+from flask_restx import Api
+
 from app.extensions import db, migrate
-from app.resources.tasks import TasksListResource, TaskResource
+from app.resources.tasks import tasks_api
+
 
 def create_app(config_class='app.config.Config'):
     app = Flask(__name__)
@@ -9,9 +11,8 @@ def create_app(config_class='app.config.Config'):
 
     db.init_app(app)
     migrate.init_app(app, db)
-    api = Api(app)
+    api = Api(app, version='1.0', title='Task API', description='Simple TODO List.', doc='/api-docs/')
 
-    api.add_resource(TaskResource, '/tasks/<int:task_id>')
-    api.add_resource(TasksListResource, '/tasks')
+    api.add_namespace(tasks_api, path='/tasks')
     
     return app
