@@ -11,7 +11,7 @@ def create_app(config_class='app.config.Config'):
     migrate.init_app(app, db)
     api = Api(app)
 
+    api.add_resource(TaskResource, '/tasks/<int:task_id>')
     api.add_resource(TasksListResource, '/tasks')
-    api.add_resource(TaskResource, '/task/<int:task_id>')
-
+    
     return app
